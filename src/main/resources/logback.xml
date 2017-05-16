@@ -1,0 +1,59 @@
+<configuration>
+    <contextName>logging-example-simple</contextName>
+    <jmxConfigurator />
+
+    <property name="DEFAULT_LOG_DIR" value="/var/log/example" />
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %highlight(%-5level) %logger{36} [%file:%line] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <append>true</append>
+        <file>${LOG_DIR:-${DEFAULT_LOG_DIR}}/example.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${LOG_DIR:-${DEFAULT_LOG_DIR}}/example.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>60</maxHistory>
+            <totalSizeCap>3GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS z} [%thread] %-5level %logger{36} [%file:%line] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="GELF" class="biz.paluch.logging.gelf.logback.GelfLogbackAppender">
+        <host>udp:192.168.4.25</host>
+        <port>12201</port>
+        <version>1.1</version>
+        <extractStackTrace>true</extractStackTrace>
+        <filterStackTrace>true</filterStackTrace>
+        <mdcProfiling>true</mdcProfiling>
+        <timestampPattern>yyyy-MM-dd HH:mm:ss.SSS z</timestampPattern>
+        <maximumMessageSize>8192</maximumMessageSize>
+        <includeFullMdc>true</includeFullMdc>
+        <!--<filter class="ch.qos.logback.classic.filter.ThresholdFilter">-->
+            <!--<level>INFO</level>-->
+        <!--</filter>-->
+        <mdcFields>foo</mdcFields>
+    </appender>
+
+    <logger name="org.przybyl.logs" level="${LOG_LEVEL:-debug}" />
+
+    <root level="${LOG_LEVEL:-info}">
+        <if condition='isDefined("LOG_STDOUT")'>
+            <then>
+                <appender-ref ref="STDOUT" />
+            </then>
+        </if>
+        <if condition='isNull("LOG_SKIPFILE")'>
+            <then>
+                <appender-ref ref="FILE" />
+            </then>
+        </if>
+        <appender-ref ref="GELF" />
+    </root>
+</configuration>
