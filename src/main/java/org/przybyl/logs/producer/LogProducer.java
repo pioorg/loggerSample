@@ -16,7 +16,6 @@ public class LogProducer {
     static final Logger logger = LoggerFactory.getLogger(LogProducer.class);
 
     public static void main(String[] args) {
-        MDC.put("foo", "bar");
         System.out.println("Starting the app.");
         addShutdownHook();
 

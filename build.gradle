@@ -6,38 +6,25 @@
  * user guide available at https://docs.gradle.org/3.3/userguide/tutorial_java_projects.html
  */
 
-// Apply the java plugin to add support for Java
 apply plugin: 'java'
-
-// Apply the application plugin to add support for building an application
 apply plugin: 'application'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 
-// In this section you declare where to find the dependencies of your project
 repositories {
-    // Use jcenter for resolving your dependencies.
-    // You can declare any Maven/Ivy/file repository here.
     jcenter()
 }
 
 dependencies {
-    // The production code uses Guava
-    compile 'com.google.guava:guava:20.0'
 
     compile "org.slf4j:slf4j-api:1.7.25"
 
     runtime "ch.qos.logback:logback-classic:1.2.3"
     runtime "org.codehaus.janino:janino:3.0.7"
 
-    compile group: 'biz.paluch.logging', name: 'logstash-gelf', version: '1.11.1'
-
-
-
-    // Use JUnit test framework
-    testCompile 'junit:junit:4.12'
+    runtime group: 'biz.paluch.logging', name: 'logstash-gelf', version: '1.11.1'
 }
 
 // Define the main class for the application
-mainClassName = 'App'
+mainClassName = 'org.przybyl.logs.producer.LogProducer'
 

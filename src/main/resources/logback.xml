@@ -26,7 +26,7 @@
     </appender>
 
     <appender name="GELF" class="biz.paluch.logging.gelf.logback.GelfLogbackAppender">
-        <host>udp:192.168.4.25</host>
+        <host>udp:192.168.4.39</host>
         <port>12201</port>
         <version>1.1</version>
         <extractStackTrace>true</extractStackTrace>
@@ -38,7 +38,6 @@
         <!--<filter class="ch.qos.logback.classic.filter.ThresholdFilter">-->
             <!--<level>INFO</level>-->
         <!--</filter>-->
-        <mdcFields>foo</mdcFields>
     </appender>
 
     <logger name="org.przybyl.logs" level="${LOG_LEVEL:-debug}" />
